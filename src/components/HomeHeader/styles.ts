@@ -3,7 +3,7 @@ import {Image} from "expo-image";
 
 export const Container = styled.View`
   width: 100%;
-  padding: 32px;
+  padding: 20px;
   flex-direction: row;
   align-items: center;
   
@@ -17,13 +17,13 @@ export const Greeting = styled.View`
 
 export const Message = styled.Text`
   color: ${({theme}) => theme.COLORS.GRAY_100};
-  font-size: ${({theme}) => theme.FONT_SIZE.LG}px;
+  font-size: ${({theme}) => theme.FONT_SIZE.SM}px;
   font-family: ${({theme}) => theme.FONT_FAMILY.REGULAR};
 `;
 
 export const Name = styled.Text`
   color: ${({theme}) => theme.COLORS.GRAY_100};
-  font-size: ${({theme}) => theme.FONT_SIZE.LG}px;
+  font-size: ${({theme}) => theme.FONT_SIZE.MD}px;
   font-family: ${({theme}) => theme.FONT_FAMILY.BOLD};
 `;
 
