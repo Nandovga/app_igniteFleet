@@ -7,8 +7,9 @@ import {useFonts, Roboto_400Regular, Roboto_700Bold} from "@expo-google-fonts/ro
 
 import theme from "./src/theme";
 import {Routes} from "./src/routes";
-import {SignIn} from "./src/screens/SignIn/Index";
-import {Loading} from "./src/components/Loading/Index";
+import {RealmProvider} from "./src/libs/realm";
+import {SignIn} from "./src/screens/SignIn";
+import {Loading} from "./src/components/Loading";
 
 /**
  * Ponto de entrada do APP
@@ -26,7 +27,9 @@ export default function App() {
                                backgroundColor="transparent"
                                translucent/>
                     <UserProvider fallback={SignIn}>
-                        <Routes/>
+                        <RealmProvider>
+                            <Routes/>
+                        </RealmProvider>
                     </UserProvider>
                 </SafeAreaProvider>
             </ThemeProvider>
