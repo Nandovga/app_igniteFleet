@@ -1,3 +1,5 @@
+import 'react-native-get-random-values'
+
 import {StatusBar} from "react-native";
 import {REALM_APP_ID} from "@env";
 import {ThemeProvider} from "styled-components";
@@ -7,8 +9,8 @@ import {useFonts, Roboto_400Regular, Roboto_700Bold} from "@expo-google-fonts/ro
 
 import theme from "./src/theme";
 import {Routes} from "./src/routes";
-import {RealmProvider} from "./src/libs/realm";
 import {SignIn} from "./src/screens/SignIn";
+import {RealmProvider} from "./src/libs/realm";
 import {Loading} from "./src/components/Loading";
 
 /**
