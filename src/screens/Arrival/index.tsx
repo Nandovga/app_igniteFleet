@@ -1,8 +1,8 @@
-import {Alert} from "react-native";
 import {BSON} from "realm";
+import {Alert} from "react-native";
 import {X} from "phosphor-react-native";
-import {useNavigation, useRoute} from "@react-navigation/native";
 import {useObject, useRealm} from "../../libs/realm";
+import {useNavigation, useRoute} from "@react-navigation/native";
 import {Container, Label, Content, LicensePlate, Description, Footer} from './styles'
 
 import {Header} from "../../components/Header";
@@ -25,6 +25,7 @@ export function Arrival() {
 
     const historic = useObject(Historic, new BSON.UUID(id) as unknown as string)
     const realm = useRealm()
+    const title = historic?.status === 'departure' ? 'Chegada' : 'Detalhes'
 
     function handleRemoveVehicleUsage(){
         Alert.alert(
@@ -61,19 +62,19 @@ export function Arrival() {
 
     return (
         <Container>
-            <Header title="Chegada"/>
+            <Header title={title}/>
             <Content>
                 <Label>Placa do Veículo</Label>
                 <LicensePlate>{historic?.license_plate}</LicensePlate>
                 <Label>Finalidade</Label>
                 <Description>{historic?.description}</Description>
-                <Footer>
-                    <ButtonIcon icon={X}
-                                onPress={handleRemoveVehicleUsage}/>
-                    <Button title="Registrar Chegada"
-                            onPress={handleArrivalRegister} />
-                </Footer>
             </Content>
+            {historic?.status === "departure" && <Footer>
+                <ButtonIcon icon={X}
+                            onPress={handleRemoveVehicleUsage}/>
+                <Button title="Registrar Chegada"
+                        onPress={handleArrivalRegister} />
+            </Footer>}
         </Container>
     )
 }

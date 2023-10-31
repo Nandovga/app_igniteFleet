@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 export const Container = styled.TouchableOpacity`
   width: 100%;
   margin: 20px 0;
-  padding: 10px;
+  padding: 10px 15px;
   border-radius: 6px;
 
   background: ${({theme}) => theme.COLORS.GRAY_700};
@@ -12,8 +12,8 @@ export const Container = styled.TouchableOpacity`
 `;
 
 export const IconBox = styled.View`
-  width: 60px;
-  height: 60px;
+  width: 68px;
+  height: 68px;
   border-radius: 6px;
   background-color: ${({theme}) => theme.COLORS.GRAY_600};
 

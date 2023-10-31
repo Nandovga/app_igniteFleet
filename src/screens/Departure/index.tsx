@@ -1,5 +1,6 @@
 import {useRef, useState} from "react";
-import {Alert, KeyboardAvoidingView, Platform, ScrollView, TextInput} from "react-native";
+import {Alert, ScrollView, TextInput} from "react-native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {useNavigation} from "@react-navigation/native";
 
 import {useUser} from "@realm/react";
@@ -12,9 +13,6 @@ import {Button} from "../../components/Button";
 import {TextAreaInput} from "../../components/TextAreaInput";
 import {LicensePlateInput} from "../../components/LicensePlateInput";
 import {licensePlateValidate} from "../../utils/licensePlateValidate";
-
-
-const keyboardAvoidingViewBehavior = Platform.OS === "android" ? "height" : "position";
 
 /**
  * Tela de Saída de veículo
@@ -63,7 +61,7 @@ export function Departure() {
     return (
         <Container>
             <Header title="Saída"/>
-            <KeyboardAvoidingView style={{flex: 1}} behavior={keyboardAvoidingViewBehavior}>
+            <KeyboardAwareScrollView extraHeight={100}>
                 <ScrollView>
                     <Content>
                         <LicensePlateInput
@@ -90,7 +88,7 @@ export function Departure() {
                         />
                     </Content>
                 </ScrollView>
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
         </Container>
     )
 }

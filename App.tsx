@@ -1,4 +1,5 @@
 import 'react-native-get-random-values'
+import './src/libs/dayjs/index'
 
 import {StatusBar} from "react-native";
 import {REALM_APP_ID} from "@env";
