@@ -1,14 +1,16 @@
+import {useEffect, useState} from "react";
 import {BSON} from "realm";
 import {Alert} from "react-native";
 import {X} from "phosphor-react-native";
 import {useObject, useRealm} from "../../libs/realm";
 import {useNavigation, useRoute} from "@react-navigation/native";
-import {Container, Label, Content, LicensePlate, Description, Footer} from './styles'
+import {Container, Label, Content, LicensePlate, Description, Footer, AsyncMessage} from './styles'
 
 import {Header} from "../../components/Header";
 import {Button} from "../../components/Button";
 import {ButtonIcon} from "../../components/ButtonIcon";
 import {Historic} from "../../libs/realm/schemas/Historic";
+import {getLastAsyncTimestamp} from "../../libs/asyncStorage/syncStorage";
 
 type RouteParamsProps = {
     id: string
@@ -19,6 +21,7 @@ type RouteParamsProps = {
  * @constructor
  */
 export function Arrival() {
+    const [dataNotSynced, setDataNotSynced] = useState(false)
     const {goBack} = useNavigation()
     const route = useRoute();
     const {id} = route.params as RouteParamsProps
@@ -27,7 +30,7 @@ export function Arrival() {
     const realm = useRealm()
     const title = historic?.status === 'departure' ? 'Chegada' : 'Detalhes'
 
-    function handleRemoveVehicleUsage(){
+    function handleRemoveVehicleUsage() {
         Alert.alert(
             'Cancelar',
             'Cancelar a utilização do veículo?',
@@ -38,14 +41,14 @@ export function Arrival() {
         )
     }
 
-    function removeVehicleUsage(){
+    function removeVehicleUsage() {
         realm.write(() => {
             realm.delete(historic)
         })
         goBack();
     }
 
-    function handleArrivalRegister(){
+    function handleArrivalRegister() {
         try {
             if (!historic)
                 return Alert.alert('Error', 'Não foi possível obter os dados para registrar a chegada do veículo.')
@@ -55,10 +58,15 @@ export function Arrival() {
             })
             Alert.alert('Chegada', 'Chegada realizada com sucesso!.')
             goBack();
-        } catch (error){
+        } catch (error) {
             Alert.alert('Error', 'Não foi possível registrar a chegada do veículo.')
         }
     }
+
+    useEffect(() => {
+        getLastAsyncTimestamp()
+            .then(lastSync => setDataNotSynced(historic!.updated_at.getTime() > lastSync))
+    }, []);
 
     return (
         <Container>
@@ -73,8 +81,11 @@ export function Arrival() {
                 <ButtonIcon icon={X}
                             onPress={handleRemoveVehicleUsage}/>
                 <Button title="Registrar Chegada"
-                        onPress={handleArrivalRegister} />
+                        onPress={handleArrivalRegister}/>
             </Footer>}
+            {dataNotSynced && <AsyncMessage>
+                Sincronização da {historic?.status === "departure" ? "partida" : "chegada"} pendente.
+            </AsyncMessage>}
         </Container>
     )
 }

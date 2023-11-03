@@ -1,7 +1,7 @@
 import {useRef, useState} from "react";
+import {useNavigation} from "@react-navigation/native";
 import {Alert, ScrollView, TextInput} from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import {useNavigation} from "@react-navigation/native";
 
 import {useUser} from "@realm/react";
 import {useRealm} from "../../libs/realm/index";

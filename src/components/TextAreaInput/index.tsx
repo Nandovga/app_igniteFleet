@@ -7,7 +7,7 @@ type Props = TextInputProps & {
     label: string
 }
 
-const TextAreaInput = forwardRef<TextInput, Props>(({label, ...rest}, ref) => {
+const TextAreaInput = forwardRef<TextInput, any>(({label, ...rest}, ref) => {
     const {COLORS} = useTheme()
 
     return (

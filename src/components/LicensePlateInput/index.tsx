@@ -1,13 +1,13 @@
+import {forwardRef} from "react";
+import {useTheme} from "styled-components";
 import {Container, Input, Label} from "./styles";
 import {TextInput, TextInputProps} from "react-native";
-import {useTheme} from "styled-components";
-import {forwardRef} from "react";
 
 type Props = TextInputProps & {
     label: string
 }
 
-const LicensePlateInput = forwardRef<TextInput, Props>(({label, ...rest}, ref) => {
+const LicensePlateInput = forwardRef<TextInput, any>(({label, ...rest}, ref) => {
     const {COLORS} = useTheme()
 
     return (
