@@ -4,10 +4,12 @@ import {useNavigation} from "@react-navigation/native";
 import {Alert, ScrollView, TextInput} from "react-native";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {
-    LocationAccuracy, LocationObjectCoords,
+    LocationAccuracy,
+    LocationObjectCoords,
     LocationSubscription,
     useForegroundPermissions,
-    watchPositionAsync
+    watchPositionAsync,
+    requestBackgroundPermissionsAsync
 } from "expo-location";
 
 import {useUser} from "@realm/react";
@@ -24,6 +26,7 @@ import {TextAreaInput} from "../../components/TextAreaInput";
 import {getAddressLocation} from "../../utils/getAddressLocation";
 import {LicensePlateInput} from "../../components/LicensePlateInput";
 import {licensePlateValidate} from "../../utils/licensePlateValidate";
+import {startLocationTask} from "../../task/backgroundLocationTaks";
 
 /**
  * Tela de Saída de veículo
@@ -46,7 +49,7 @@ export function Departure() {
     const licensePlateRef = useRef<TextInput>(null)
     const descriptionRef = useRef<TextInput>(null)
 
-    function handleDepartureRegister() {
+    async function handleDepartureRegister() {
         try {
             if (!licensePlateValidate(licensePlate)) {
                 licensePlateRef.current?.focus()
@@ -56,7 +59,18 @@ export function Departure() {
                 descriptionRef.current?.focus()
                 return Alert.alert('Finalidade', 'Por favor, informe a finalidade da utilização do veículo.')
             }
+
+            if (!currentCoords?.longitude && currentCoords?.longitude) {
+                return Alert.alert('Localização', 'Não foi possível obter a localização atual.')
+            }
             setIsRegistering(true)
+            const backgroundPermissions = await requestBackgroundPermissionsAsync();
+            if (!backgroundPermissions.granted) {
+                setIsRegistering(false)
+                return Alert.alert('Localização', 'É necessário permitir que App tenha acesso a localização em segundo plano. Acesse as configurações do dispositivo e habilite "Permitir o tempo todo"')
+            }
+
+            await startLocationTask()
             realm.write(() => {
                 realm.create('Historic', Historic.generate({
                     user_id: user!.id,
@@ -81,13 +95,14 @@ export function Departure() {
     useEffect(() => {
         if (!locationForegroundPermission?.granted)
             return;
-
         let subscriptions: LocationSubscription;
         watchPositionAsync({
-            accuracy: LocationAccuracy.High,
+            accuracy: LocationAccuracy.Highest,
+            distanceInterval: 1,
             timeInterval: 1000
         }, (location) => {
             setCurrentCoords(location.coords)
+            setIsLoadingLocation(false)
             getAddressLocation(location.coords)
                 .then((address) => {
                     if (address)
