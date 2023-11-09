@@ -1,23 +1,29 @@
-import {Container, Description, Info, Label} from "./styles";
-import {IconBox, IconBoxProps} from "../IconBox";
+import { IconBox, IconBoxProps } from '../IconBox';
+import { Container, Description, Info, Label } from './styles';
 
 export type LocationInfoProps = {
-    label: string
-    description: string
+  label: string;
+  description: string
 }
 
 type Props = LocationInfoProps & {
-    icon: IconBoxProps
+  icon: IconBoxProps
 }
 
-export function LocationInfo({label, icon, description}: Props) {
-    return (
-        <Container>
-            <IconBox icon={icon}/>
-            <Info>
-                <Label numberOfLines={1}>{label}</Label>
-                <Description numberOfLines={1}>{description}</Description>
-            </Info>
-        </Container>
-    )
+export function LocationInfo({ icon, label, description }: Props) {
+  return (
+    <Container>
+      <IconBox icon={icon} />
+
+      <Info>
+        <Label numberOfLines={1}>
+          {label}
+        </Label>
+
+        <Description numberOfLines={1}>
+          {description}
+        </Description>
+      </Info>
+    </Container>
+  );
 }
